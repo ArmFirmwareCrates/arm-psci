@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: Copyright 2025 Arm Limited and/or its affiliates <open-source-office@arm.com>
+# SPDX-License-Identifier: MIT OR Apache-2.0
+
+[package]
+name = "arm-psci"
+version = "0.1.0"
+authors = [
+    "Balint Dobszay <balint.dobszay@arm.com>",
+    "Imre Kis <imre.kis@arm.com>",
+]
+description = "Arm Power State Coordination Interface (PSCI) library"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://git.trustedfirmware.org/rust-spmc/arm-psci.git"
+keywords = ["arm", "psci", "power", "coordination", "interface"]
+categories = ["hardware-support", "embedded", "no-std", "no-std::no-alloc"]
+readme = "README.md"
+rust-version = "1.82"
+
+[dependencies]
