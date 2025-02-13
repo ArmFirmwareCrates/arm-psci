@@ -17,3 +17,6 @@ categories = ["hardware-support", "embedded", "no-std", "no-std::no-alloc"]
 readme = "README.md"
 
 [dependencies]
+bitflags = "2.8"
+num_enum = { version = "0.7", default-features = false }
+thiserror = { version = "2.0", default-features = false }
