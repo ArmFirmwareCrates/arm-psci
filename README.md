@@ -1,14 +1,22 @@
 # Arm Power State Coordination Interface (PSCI) library
 
-Implementation of [Arm Power State Coordination Interface](https://developer.arm.com/documentation/den0022/latest/)
-primitives.
+This crate aims to offer functions and user-friendly types for parsing and constructing arguments
+of [Arm Power State Coordination Interface](https://developer.arm.com/documentation/den0022/latest/)
+(PSCI) calls. This functionality can be beneficial for both firmware and OS components.
 
+However, doing the actual `SMC`/`HVC`/`ERET` calls, or implementing power management logic is beyond
+the scope of this crate.
 
 ## Implemented features
 
+* Handling all PSCI 1.3 mandatory and optional functions
+* Handling both 32-bit and 64-bit call formats
+* Dedicated types for common PSCI call arguments
+* Unit tests
 
-## Future plans
+# Limitations
 
+* The implementation does not handle pre-1.0 format suspend power state (see 5.4.2.1 Original format)
 
 ## License
 
@@ -29,6 +37,8 @@ listed below.
 ## Contributing
 
 Please follow the directions of the [Trusted Firmware Processes](https://trusted-firmware-docs.readthedocs.io/en/latest/generic_processes/index.html)
+
+Contributions are handled through [review.trustedfirmware.org](https://review.trustedfirmware.org/q/project:rust-spmc/arm-psci).
 
 ## Reporting Security Issues
 
