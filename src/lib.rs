@@ -978,3 +978,780 @@ impl Function {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const MPIDR32: Mpidr = Mpidr {
+        aff0: 0x11,
+        aff1: 0x22,
+        aff2: 0x33,
+        aff3: None,
+    };
+    const MPIDR32_VALUE: u32 = 0x00332211;
+
+    const MPIDR64: Mpidr = Mpidr {
+        aff0: 0x11,
+        aff1: 0x22,
+        aff2: 0x33,
+        aff3: Some(0x44),
+    };
+
+    const MPIDR64_VALUE: u64 = 0x00000044_00332211;
+
+    const POWER_STATE: PowerState = PowerState::PowerDown(0xf12_3456);
+
+    const POWER_STATE_VALUE: u32 = 0x4f12_3456;
+
+    macro_rules! validate_function {
+        ( $regs:expr, $function:expr, $function_id:expr ) => {
+            assert_eq!(Ok($function), Function::try_from($regs));
+            assert_eq!($function_id, ($function).function_id());
+
+            let mut built_regs = [0; 4];
+            $function.copy_to_array(&mut built_regs);
+            assert_eq!($regs, built_regs);
+        };
+    }
+
+    #[test]
+    fn test_error() {
+        assert_eq!(
+            ErrorCode::NotSupported,
+            ErrorCode::from(Error::UnrecognisedFunctionId(0))
+        );
+
+        assert_eq!(
+            ErrorCode::InvalidParameters,
+            ErrorCode::from(Error::InvalidVersion(0))
+        );
+    }
+
+    #[test]
+    fn test_return_code() {
+        assert_eq!(
+            Err(Error::UnrecognisedErrorCode(-100)),
+            ReturnCode::try_from(-100)
+        );
+
+        assert_eq!(Ok(ReturnCode::Success), ReturnCode::try_from(0));
+        assert_eq!(
+            Ok(ReturnCode::Error(ErrorCode::NotSupported)),
+            ReturnCode::try_from(-1)
+        );
+
+        assert_eq!(0, i32::from(ReturnCode::Success));
+        assert_eq!(-1, i32::from(ReturnCode::Error(ErrorCode::NotSupported)));
+    }
+
+    #[test]
+    fn test_error_code() {
+        assert_eq!(-1, i32::from(ErrorCode::NotSupported));
+        assert_eq!(-2, i32::from(ErrorCode::InvalidParameters));
+        assert_eq!(-3, i32::from(ErrorCode::Denied));
+        assert_eq!(-4, i32::from(ErrorCode::AlreadyOn));
+        assert_eq!(-5, i32::from(ErrorCode::OnPending));
+        assert_eq!(-6, i32::from(ErrorCode::InternalFailure));
+        assert_eq!(-7, i32::from(ErrorCode::NotPresent));
+        assert_eq!(-8, i32::from(ErrorCode::Disabled));
+        assert_eq!(-9, i32::from(ErrorCode::InvalidAddress));
+    }
+
+    #[test]
+    fn test_version() {
+        assert_eq!(
+            Err(Error::InvalidVersion(0xffff_ffff)),
+            Version::try_from(0xffff_ffff)
+        );
+
+        assert_eq!(
+            Ok(Version {
+                major: 0x7123,
+                minor: 0x4567
+            }),
+            Version::try_from(0x7123_4567)
+        );
+
+        assert_eq!(
+            0x789a_bcde,
+            u32::from(Version {
+                major: 0x789a,
+                minor: 0xbcde
+            })
+        );
+    }
+
+    #[test]
+    fn test_power_state() {
+        assert_eq!(
+            Err(Error::InvalidPowerState(0x8000_0000)),
+            PowerState::try_from(0x8000_0000)
+        );
+
+        assert_eq!(
+            Err(Error::InvalidPowerState(0x3000_0000)),
+            PowerState::try_from(0x3000_0000)
+        );
+
+        assert_eq!(
+            Ok(PowerState::StandbyOrRetention(0xfff_ffff),),
+            PowerState::try_from(0x0fff_ffff)
+        );
+
+        assert_eq!(
+            Ok(PowerState::PowerDown(0x123_ffff)),
+            PowerState::try_from(0x4123_ffff)
+        );
+
+        assert_eq!(
+            0x0123_4567,
+            u32::from(PowerState::StandbyOrRetention(0x123_4567))
+        );
+
+        assert_eq!(0x4123_4567, u32::from(PowerState::PowerDown(0x123_4567)));
+    }
+
+    #[test]
+    fn test_mpidr() {
+        assert_eq!(
+            Err(Error::InvalidMpidr32(0xff00_0000)),
+            Mpidr::try_from(0xff00_0000u32)
+        );
+
+        assert_eq!(
+            Ok(Mpidr {
+                aff0: 0x33,
+                aff1: 0x22,
+                aff2: 0x11,
+                aff3: None
+            }),
+            Mpidr::try_from(0x0011_2233u32)
+        );
+
+        assert_eq!(
+            Err(Error::InvalidMpidr64(0xff00_0000_0000_0000)),
+            Mpidr::try_from(0xff00_0000_0000_0000u64)
+        );
+
+        assert_eq!(
+            Ok(Mpidr {
+                aff0: 0x33,
+                aff1: 0x22,
+                aff2: 0x11,
+                aff3: Some(0x44)
+            }),
+            Mpidr::try_from(0x0000_0044_0011_2233u64)
+        );
+
+        assert_eq!(
+            0x0011_2233u32,
+            Mpidr {
+                aff0: 0x33,
+                aff1: 0x22,
+                aff2: 0x11,
+                aff3: None
+            }
+            .into()
+        );
+
+        assert_eq!(
+            0x0000_0044_0011_2233u64,
+            Mpidr {
+                aff0: 0x33,
+                aff1: 0x22,
+                aff2: 0x11,
+                aff3: Some(0x44)
+            }
+            .into()
+        );
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_mpidr_32_invalid() {
+        let _ = u32::from(Mpidr {
+            aff0: 0x33,
+            aff1: 0x22,
+            aff2: 0x11,
+            aff3: Some(0x44),
+        });
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_mpidr_64_invalid() {
+        let _ = u64::from(Mpidr {
+            aff0: 0x33,
+            aff1: 0x22,
+            aff2: 0x11,
+            aff3: None,
+        });
+    }
+
+    #[test]
+    fn test_affinity_info_value() {
+        assert_eq!(0, u32::from(AffinityInfo::On));
+        assert_eq!(1, u32::from(AffinityInfo::Off));
+        assert_eq!(2, u32::from(AffinityInfo::OnPending));
+    }
+
+    #[test]
+    fn test_migration_info_type() {
+        assert_eq!(0, u32::from(MigrateInfoType::MigrateCapable));
+        assert_eq!(1, u32::from(MigrateInfoType::NotMigrateCapable));
+        assert_eq!(2, u32::from(MigrateInfoType::MigrationNotRequired));
+    }
+
+    #[test]
+    fn test_reset_type() {
+        assert_eq!(
+            Err(Error::UnrecognisedSystemReset2Type(0x1234_5678)),
+            ResetType::try_from(0x1234_5678)
+        );
+
+        assert_eq!(
+            Ok(ResetType::Architectural(
+                ArchitecturalResetType::SystemWarmReset
+            )),
+            ResetType::try_from(0x0000_0000)
+        );
+
+        assert_eq!(
+            Ok(ResetType::VendorSpecific(0x0000_0001)),
+            ResetType::try_from(0x8000_0001)
+        );
+
+        assert_eq!(
+            0x0000_0000u32,
+            ResetType::Architectural(ArchitecturalResetType::SystemWarmReset).into()
+        );
+        assert_eq!(
+            0x8000_0001u32,
+            ResetType::VendorSpecific(0x0000_0001).into()
+        );
+    }
+
+    #[test]
+    fn test_psci_feature() {
+        assert_eq!(
+            Err(Error::UnrecognisedFunctionId(0x1234_5678)),
+            PsciFeature::try_from(0x1234_5678)
+        );
+
+        assert_eq!(
+            Ok(PsciFeature::SmcccVersion),
+            PsciFeature::try_from(0x8000_0000)
+        );
+
+        assert_eq!(
+            Ok(PsciFeature::PsciFunction(FunctionId::PsciVersion)),
+            PsciFeature::try_from(0x8400_0000)
+        );
+
+        assert_eq!(0x8000_0000u32, PsciFeature::SmcccVersion.into());
+        assert_eq!(
+            0x8400_0000u32,
+            PsciFeature::PsciFunction(FunctionId::PsciVersion).into()
+        );
+    }
+
+    #[test]
+    fn test_feature_flags_suspend() {
+        assert_eq!(
+            Err(Error::UnrecognisedPsciFeaturesFlags(0x0000_0004)),
+            FeatureFlagsCpuSuspend::try_from(0x0000_0004)
+        );
+
+        assert_eq!(
+            Ok(FeatureFlagsCpuSuspend::empty()),
+            FeatureFlagsCpuSuspend::try_from(0x0000_0000)
+        );
+
+        assert_eq!(
+            Ok(FeatureFlagsCpuSuspend::OS_INITIATED_MODE),
+            FeatureFlagsCpuSuspend::try_from(0x0000_0001)
+        );
+
+        assert_eq!(
+            Ok(FeatureFlagsCpuSuspend::EXTENDED_POWER_STATE),
+            FeatureFlagsCpuSuspend::try_from(0x0000_0002)
+        );
+
+        assert_eq!(
+            Ok(FeatureFlagsCpuSuspend::OS_INITIATED_MODE
+                | FeatureFlagsCpuSuspend::EXTENDED_POWER_STATE),
+            FeatureFlagsCpuSuspend::try_from(0x0000_0003)
+        );
+
+        assert_eq!(
+            0x0000_0003,
+            u32::from(
+                FeatureFlagsCpuSuspend::OS_INITIATED_MODE
+                    | FeatureFlagsCpuSuspend::EXTENDED_POWER_STATE
+            )
+        );
+    }
+
+    #[test]
+    fn test_feature_flags_system_off2() {
+        assert_eq!(
+            Err(Error::UnrecognisedPsciFeaturesFlags(0x0000_0002)),
+            FeatureFlagsSystemOff2::try_from(0x0000_0002)
+        );
+
+        assert_eq!(
+            Ok(FeatureFlagsSystemOff2::empty()),
+            FeatureFlagsSystemOff2::try_from(0x0000_0000)
+        );
+
+        assert_eq!(
+            Ok(FeatureFlagsSystemOff2::HIBERNATE_OFF),
+            FeatureFlagsSystemOff2::try_from(0x0000_0001)
+        );
+
+        assert_eq!(0x0000_0000u32, FeatureFlagsSystemOff2::empty().into());
+
+        assert_eq!(0x0000_0001u32, FeatureFlagsSystemOff2::HIBERNATE_OFF.into());
+    }
+
+    #[test]
+    fn test_hw_state() {
+        assert_eq!(0, u32::from(HwState::On));
+        assert_eq!(1, u32::from(HwState::Off));
+        assert_eq!(2, u32::from(HwState::Standby));
+    }
+
+    #[test]
+    fn test_function_version() {
+        validate_function!(
+            [0x8400_0000, 0, 0, 0],
+            Function::Version,
+            FunctionId::PsciVersion
+        );
+    }
+
+    #[test]
+    fn test_cpu_suspend() {
+        validate_function!(
+            [
+                0x8400_0001,
+                POWER_STATE_VALUE.into(),
+                0xabcdef01,
+                0x23456789
+            ],
+            Function::CpuSuspend {
+                state: POWER_STATE,
+                entry: EntryPoint::Entry32 {
+                    entry_point_address: 0xabcdef01,
+                    context_id: 0x23456789
+                }
+            },
+            FunctionId::CpuSuspend32
+        );
+
+        validate_function!(
+            [
+                0xc400_0001,
+                POWER_STATE_VALUE.into(),
+                0xabcdef01_23456789,
+                0x23456789_abcdef01
+            ],
+            Function::CpuSuspend {
+                state: POWER_STATE,
+                entry: EntryPoint::Entry64 {
+                    entry_point_address: 0xabcdef01_23456789,
+                    context_id: 0x23456789_abcdef01
+                }
+            },
+            FunctionId::CpuSuspend64
+        );
+    }
+
+    #[test]
+    fn test_function_cpu_off() {
+        validate_function!([0x8400_0002, 0, 0, 0], Function::CpuOff, FunctionId::CpuOff);
+    }
+
+    #[test]
+    fn test_function_cpu_on() {
+        validate_function!(
+            [0x8400_0003, MPIDR32_VALUE.into(), 0xabcdef01, 0x23456789],
+            Function::CpuOn {
+                target_cpu: MPIDR32,
+                entry: EntryPoint::Entry32 {
+                    entry_point_address: 0xabcdef01,
+                    context_id: 0x23456789,
+                },
+            },
+            FunctionId::CpuOn32
+        );
+
+        validate_function!(
+            [
+                0xc400_0003,
+                MPIDR64_VALUE,
+                0x01234567_89abcdef,
+                0x89abcdef_01234567,
+            ],
+            Function::CpuOn {
+                target_cpu: MPIDR64,
+                entry: EntryPoint::Entry64 {
+                    entry_point_address: 0x01234567_89abcdef,
+                    context_id: 0x89abcdef_01234567,
+                },
+            },
+            FunctionId::CpuOn64
+        );
+    }
+
+    #[test]
+    #[should_panic]
+    fn test_function_cpu_on_mixed_32_64() {
+        let mut regs = [0u64; 4];
+        Function::CpuOn {
+            target_cpu: MPIDR64,
+            entry: EntryPoint::Entry32 {
+                entry_point_address: 1,
+                context_id: 2,
+            },
+        }
+        .copy_to_array(&mut regs);
+    }
+
+    #[test]
+    fn test_function_affinity_info() {
+        validate_function!(
+            [0x8400_0004, MPIDR32_VALUE.into(), 2, 0],
+            Function::AffinityInfo {
+                mpidr: MPIDR32,
+                lowest_affinity_level: 2,
+            },
+            FunctionId::AffinityInfo32
+        );
+
+        validate_function!(
+            [0xc400_0004, MPIDR64_VALUE, 2, 0],
+            Function::AffinityInfo {
+                mpidr: MPIDR64,
+                lowest_affinity_level: 2,
+            },
+            FunctionId::AffinityInfo64
+        );
+
+        assert_eq!(
+            Err(Error::InvalidLowerAffinityLevel(3)),
+            Function::try_from([0x8400_0004, MPIDR32_VALUE.into(), 3, 0])
+        );
+
+        assert_eq!(
+            Err(Error::InvalidLowerAffinityLevel(4)),
+            Function::try_from([0xc400_0004, MPIDR64_VALUE, 4, 0])
+        );
+    }
+
+    #[test]
+    fn test_function_migrate() {
+        validate_function!(
+            [0x8400_0005, MPIDR32_VALUE.into(), 0, 0],
+            Function::Migrate {
+                target_affinity: MPIDR32,
+            },
+            FunctionId::Migrate32
+        );
+
+        validate_function!(
+            [0xc400_0005, MPIDR64_VALUE, 0, 0],
+            Function::Migrate {
+                target_affinity: MPIDR64,
+            },
+            FunctionId::Migrate64
+        );
+    }
+
+    #[test]
+    fn test_function_migrate_info_type() {
+        validate_function!(
+            [0x8400_0006, 0, 0, 0],
+            Function::MigrateInfoType,
+            FunctionId::MigrateInfoType
+        );
+    }
+
+    #[test]
+    fn test_function_migrate_info_up_cpu() {
+        validate_function!(
+            [0x8400_0007, 0, 0, 0],
+            Function::MigrateInfoUpCpu { is_32bit: true },
+            FunctionId::MigrateInfoUpCpu32
+        );
+
+        validate_function!(
+            [0xc400_0007, 0, 0, 0],
+            Function::MigrateInfoUpCpu { is_32bit: false },
+            FunctionId::MigrateInfoUpCpu64
+        );
+    }
+
+    #[test]
+    fn test_function_system_off() {
+        validate_function!(
+            [0x8400_0008, 0, 0, 0],
+            Function::SystemOff,
+            FunctionId::SystemOff
+        );
+    }
+
+    #[test]
+    fn test_function_system_off2() {
+        validate_function!(
+            [0x8400_0015, 0x0000_0001, 0xabcdef01, 0],
+            Function::SystemOff2 {
+                off_type: SystemOff2Type::HibernateOff,
+                cookie: Cookie::Cookie32(0xabcdef01),
+            },
+            FunctionId::SystemOff232
+        );
+
+        validate_function!(
+            [0xc400_0015, 0x0000_0001, 0xabcdef01_23456789, 0],
+            Function::SystemOff2 {
+                off_type: SystemOff2Type::HibernateOff,
+                cookie: Cookie::Cookie64(0xabcdef01_23456789),
+            },
+            FunctionId::SystemOff264
+        );
+    }
+
+    #[test]
+    fn test_function_system_reset() {
+        validate_function!(
+            [0x8400_0009, 0, 0, 0],
+            Function::SystemReset,
+            FunctionId::SystemReset
+        );
+    }
+
+    #[test]
+    fn test_function_system_reset2() {
+        validate_function!(
+            [0x8400_0012, 0, 0xabcdef01, 0],
+            Function::SystemReset2 {
+                reset_type: ResetType::Architectural(ArchitecturalResetType::SystemWarmReset),
+                cookie: Cookie::Cookie32(0xabcdef01),
+            },
+            FunctionId::SystemReset232
+        );
+
+        validate_function!(
+            [0xc400_0012, 0, 0xabcdef01_23456789, 0],
+            Function::SystemReset2 {
+                reset_type: ResetType::Architectural(ArchitecturalResetType::SystemWarmReset),
+                cookie: Cookie::Cookie64(0xabcdef01_23456789),
+            },
+            FunctionId::SystemReset264
+        );
+    }
+
+    #[test]
+    fn test_function_mem_protect() {
+        validate_function!(
+            [0x8400_0013, 0x0000_0001, 0, 0],
+            Function::MemProtect { enabled: true },
+            FunctionId::MemProtect
+        );
+
+        validate_function!(
+            [0x8400_0013, 0x0000_0000, 0, 0],
+            Function::MemProtect { enabled: false },
+            FunctionId::MemProtect
+        );
+    }
+
+    #[test]
+    fn test_function_mem_protect_check_range() {
+        validate_function!(
+            [0x8400_0014, 0xabcdef01, 0x23456789, 0],
+            Function::MemProtectCheckRange {
+                range: MemProtectRange::Range32 {
+                    base: 0xabcdef01,
+                    length: 0x23456789,
+                },
+            },
+            FunctionId::MemProtectCheckRange32
+        );
+
+        validate_function!(
+            [0xc400_0014, 0xabcdef01_23456789, 0x23456789_abcdef01, 0],
+            Function::MemProtectCheckRange {
+                range: MemProtectRange::Range64 {
+                    base: 0xabcdef01_23456789,
+                    length: 0x23456789_abcdef01,
+                },
+            },
+            FunctionId::MemProtectCheckRange64
+        );
+    }
+
+    #[test]
+    fn test_function_features() {
+        validate_function!(
+            [0x8400_000a, 0x8000_0000, 0, 0],
+            Function::Features {
+                psci_func_id: PsciFeature::SmcccVersion,
+            },
+            FunctionId::PsciFeatures
+        );
+
+        validate_function!(
+            [0x8400_000a, 0x8400_0001, 0, 0],
+            Function::Features {
+                psci_func_id: PsciFeature::PsciFunction(FunctionId::CpuSuspend32),
+            },
+            FunctionId::PsciFeatures
+        );
+    }
+
+    #[test]
+    fn test_function_cpu_freeze() {
+        validate_function!(
+            [0x8400_000b, 0, 0, 0],
+            Function::CpuFreeze,
+            FunctionId::CpuFreeze
+        );
+    }
+
+    #[test]
+    fn test_function_cpu_default_suspend() {
+        validate_function!(
+            [0x8400_000c, 0xabcdef01, 0x23456789, 0],
+            Function::CpuDefaultSuspend {
+                entry: EntryPoint::Entry32 {
+                    entry_point_address: 0xabcdef01,
+                    context_id: 0x23456789,
+                },
+            },
+            FunctionId::CpuDefaultSuspend32
+        );
+
+        validate_function!(
+            [0xc400_000c, 0xabcdef01_23456789, 0x23456789_abcdef01, 0],
+            Function::CpuDefaultSuspend {
+                entry: EntryPoint::Entry64 {
+                    entry_point_address: 0xabcdef01_23456789,
+                    context_id: 0x23456789_abcdef01,
+                },
+            },
+            FunctionId::CpuDefaultSuspend64
+        );
+    }
+
+    #[test]
+    fn test_function_node_hw_state() {
+        validate_function!(
+            [0x8400_000d, MPIDR32_VALUE.into(), 0xabcdef01, 0],
+            Function::NodeHwState {
+                target_cpu: MPIDR32,
+                power_level: 0xabcdef01,
+            },
+            FunctionId::NodeHwState32
+        );
+
+        validate_function!(
+            [0xc400_000d, MPIDR64_VALUE, 0xabcdef01, 0],
+            Function::NodeHwState {
+                target_cpu: MPIDR64,
+                power_level: 0xabcdef01,
+            },
+            FunctionId::NodeHwState64
+        );
+    }
+
+    #[test]
+    fn test_function_system_suspend() {
+        validate_function!(
+            [0x8400_000e, 0xabcdef01, 0x23456789, 0],
+            Function::SystemSuspend {
+                entry: EntryPoint::Entry32 {
+                    entry_point_address: 0xabcdef01,
+                    context_id: 0x23456789,
+                },
+            },
+            FunctionId::SystemSuspend32
+        );
+
+        validate_function!(
+            [0xc400_000e, 0xabcdef01_23456789, 0x23456789_abcdef01, 0],
+            Function::SystemSuspend {
+                entry: EntryPoint::Entry64 {
+                    entry_point_address: 0xabcdef01_23456789,
+                    context_id: 0x23456789_abcdef01,
+                },
+            },
+            FunctionId::SystemSuspend64
+        );
+    }
+
+    #[test]
+    fn test_function_set_suspend_mode() {
+        validate_function!(
+            [0x8400_000f, 0x0000_0001, 0, 0],
+            Function::SetSuspendMode {
+                mode: SuspendMode::OsInitiated,
+            },
+            FunctionId::PsciSetSuspendMode
+        );
+    }
+
+    #[test]
+    fn test_function_stat_residency() {
+        validate_function!(
+            [
+                0x8400_0010,
+                MPIDR32_VALUE.into(),
+                POWER_STATE_VALUE.into(),
+                0,
+            ],
+            Function::StatResidency {
+                target_cpu: MPIDR32,
+                power_state: POWER_STATE,
+            },
+            FunctionId::PsciStatResidency32
+        );
+
+        validate_function!(
+            [0xc400_0010, MPIDR64_VALUE, POWER_STATE_VALUE.into(), 0],
+            Function::StatResidency {
+                target_cpu: MPIDR64,
+                power_state: POWER_STATE,
+            },
+            FunctionId::PsciStatResidency64
+        );
+    }
+
+    #[test]
+    fn test_function_stat_count() {
+        validate_function!(
+            [
+                0x8400_0011,
+                MPIDR32_VALUE.into(),
+                POWER_STATE_VALUE.into(),
+                0,
+            ],
+            Function::StatCount {
+                target_cpu: MPIDR32,
+                power_state: POWER_STATE,
+            },
+            FunctionId::PsciStatCount32
+        );
+
+        validate_function!(
+            [0xc400_0011, MPIDR64_VALUE, POWER_STATE_VALUE.into(), 0],
+            Function::StatCount {
+                target_cpu: MPIDR64,
+                power_state: POWER_STATE,
+            },
+            FunctionId::PsciStatCount64
+        );
+    }
+}
