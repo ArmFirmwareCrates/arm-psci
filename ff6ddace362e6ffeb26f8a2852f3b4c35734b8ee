@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "6388bfeb_34d4df7f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-02-20T17:29:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bfde8290_7851cfbd",
+      "revId": "ff6ddace362e6ffeb26f8a2852f3b4c35734b8ee",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "222e9ef9_4378a2f2",
         "filename": "src/lib.rs",
         "patchSetId": 2
@@ -31,6 +49,24 @@
       "writtenOn": "2025-02-20T00:16:42Z",
       "side": 1,
       "message": "Possible alternative:\n\n```\npub enum PowerState {\n    StandbyOrRetention(u32),\n    PowerOff(u32),\n}\n```\n\nThen:\n\n```\nimpl TryFrom\u003cu32\u003e for PowerState {\n    type Error \u003d Error;\n\n    fn try_from(value: u32) -\u003e Result\u003cSelf, Self::Error\u003e {\n        const MBZ_BITS: u32 \u003d 0xb000_0000;\n        if value \u0026 MBZ_BITS !\u003d 0 {\n            return Err(Error::InvalidPowerState(value));\n        }\n        \n        let v \u003d value \u0026 0x0fff_ffff;\n        Ok(if (value \u0026 0x4000_0000) \u003d\u003d 0 {\n            PowerState::StandbyOrRetention(v)\n        } else {\n            PowerState::PowerOff(v)\n        })\n    }\n}\n```\n\nJudging by the results I got from `std::mem::size_of`, I think our 2 approaches are the same in the end, at least for object representation. So, it\u0027d only be a source code parsimony thing. Up to you!",
+      "revId": "ff6ddace362e6ffeb26f8a2852f3b4c35734b8ee",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "223e2e83_912b19c0",
+        "filename": "src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-02-20T17:29:09Z",
+      "side": 1,
+      "message": "Changed as recommended, and added couple consts for capturing mask values.",
+      "parentUuid": "222e9ef9_4378a2f2",
       "revId": "ff6ddace362e6ffeb26f8a2852f3b4c35734b8ee",
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "041e182f_a5c023da",
+        "filename": "src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 328,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-02-20T17:29:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da2d3c30_a8fdcbf0",
+      "revId": "ff6ddace362e6ffeb26f8a2852f3b4c35734b8ee",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "af0d2414_7170b39f",
         "filename": "src/lib.rs",
         "patchSetId": 2
@@ -65,6 +119,24 @@
       "writtenOn": "2025-02-20T00:16:42Z",
       "side": 1,
       "message": "The `bitflags` crate might be useful here? (Up to you.) (We\u0027re already using it in RF-A.)",
+      "revId": "ff6ddace362e6ffeb26f8a2852f3b4c35734b8ee",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17b18c98_d28fcb0a",
+        "filename": "src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-02-20T17:29:09Z",
+      "side": 1,
+      "message": "Changed to bitflags. The current implementation prohibits having any unknown bits. I am wondering if this is the correct way of handling feature flags. Future PSCI versions with new flags present can break older callers.",
+      "parentUuid": "af0d2414_7170b39f",
       "revId": "ff6ddace362e6ffeb26f8a2852f3b4c35734b8ee",
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     }
