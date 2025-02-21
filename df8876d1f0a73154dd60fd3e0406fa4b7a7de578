@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14fc4c31_c7823f4a",
+        "filename": "README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001390
+      },
+      "writtenOn": "2025-02-21T18:41:42Z",
+      "side": 1,
+      "message": "Nit: \"32-bit\" and \"64-bit\" (compound adjectives)",
+      "revId": "df8876d1f0a73154dd60fd3e0406fa4b7a7de578",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17fbe614_dcc33b01",
+        "filename": "src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1001390
+      },
+      "writtenOn": "2025-02-21T18:41:42Z",
+      "side": 1,
+      "message": "Possibly at the top of this document, possibly here, it\u0027d be good to say which document you\u0027re citing. Looks like it\u0027s DEN0022F Power State Coordination Interface, right?",
+      "revId": "df8876d1f0a73154dd60fd3e0406fa4b7a7de578",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bdfb738_188abb7d",
+        "filename": "src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1001390
+      },
+      "writtenOn": "2025-02-21T18:41:42Z",
+      "side": 1,
+      "message": "Add punctuation for these sentences.",
+      "revId": "df8876d1f0a73154dd60fd3e0406fa4b7a7de578",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fea8a341_1d5e83e0",
+        "filename": "src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1001390
+      },
+      "writtenOn": "2025-02-21T18:41:42Z",
+      "side": 1,
+      "message": "Add a blank `/// ` line for a paragraph break here.",
+      "revId": "df8876d1f0a73154dd60fd3e0406fa4b7a7de578",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d22c7940_3b34d09c",
+        "filename": "src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1001390
+      },
+      "writtenOn": "2025-02-21T18:41:42Z",
+      "side": 1,
+      "message": "Only because it\u0027s more concise, I\u0027d call this `Status`. But, `ReturnCode` is fine; up to you.",
+      "revId": "df8876d1f0a73154dd60fd3e0406fa4b7a7de578",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    }
+  ]
+}
