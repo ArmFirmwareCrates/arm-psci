@@ -18,6 +18,24 @@
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bc7295f_793bc53c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-02-24T15:40:37Z",
+      "side": 1,
+      "message": "Thanks.",
+      "parentUuid": "cd15f163_8ff34a1c",
+      "revId": "df8876d1f0a73154dd60fd3e0406fa4b7a7de578",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14fc4c31_c7823f4a",
@@ -31,6 +49,24 @@
       "writtenOn": "2025-02-21T18:41:42Z",
       "side": 1,
       "message": "Nit: \"32-bit\" and \"64-bit\" (compound adjectives)",
+      "revId": "df8876d1f0a73154dd60fd3e0406fa4b7a7de578",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97cf9b3d_018bce17",
+        "filename": "README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-02-24T15:40:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14fc4c31_c7823f4a",
       "revId": "df8876d1f0a73154dd60fd3e0406fa4b7a7de578",
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     },
@@ -52,6 +88,24 @@
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "97701c7f_a797ce81",
+        "filename": "src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-02-24T15:40:37Z",
+      "side": 1,
+      "message": "Done, also added the exact version of the spec.",
+      "parentUuid": "17fbe614_dcc33b01",
+      "revId": "df8876d1f0a73154dd60fd3e0406fa4b7a7de578",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8bdfb738_188abb7d",
@@ -69,6 +123,24 @@
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bffbeb42_4728fe7c",
+        "filename": "src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-02-24T15:40:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8bdfb738_188abb7d",
+      "revId": "df8876d1f0a73154dd60fd3e0406fa4b7a7de578",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fea8a341_1d5e83e0",
@@ -82,6 +154,24 @@
       "writtenOn": "2025-02-21T18:41:42Z",
       "side": 1,
       "message": "Add a blank `/// ` line for a paragraph break here.",
+      "revId": "df8876d1f0a73154dd60fd3e0406fa4b7a7de578",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "836adf67_0296698f",
+        "filename": "src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-02-24T15:40:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fea8a341_1d5e83e0",
       "revId": "df8876d1f0a73154dd60fd3e0406fa4b7a7de578",
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     },
@@ -105,6 +195,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "633750eb_46b67257",
+        "filename": "src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-02-24T15:40:37Z",
+      "side": 1,
+      "message": "I agree that it would be better to call this `Status`, but I wanted to keep this consistent with the spec, which uses the term \u0027return code\u0027 everywhere.",
+      "parentUuid": "d22c7940_3b34d09c",
+      "revId": "df8876d1f0a73154dd60fd3e0406fa4b7a7de578",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "78ce43f3_88db43e7",
         "filename": "src/lib.rs",
         "patchSetId": 4
@@ -116,6 +224,24 @@
       "writtenOn": "2025-02-24T14:37:11Z",
       "side": 1,
       "message": "Nit: This is slightly confusing to me. We\u0027ve got ReturnCode, ErrorCode, and here and in the line above we\u0027ve got Error return codes and Return error codes. I think \"Error codes\" instead of \"Error return codes\" on line 128 will be clearer.",
+      "revId": "df8876d1f0a73154dd60fd3e0406fa4b7a7de578",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6086fd3_970e2097",
+        "filename": "src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-02-24T15:40:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78ce43f3_88db43e7",
       "revId": "df8876d1f0a73154dd60fd3e0406fa4b7a7de578",
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     },
@@ -133,6 +259,24 @@
       "writtenOn": "2025-02-24T14:37:11Z",
       "side": 1,
       "message": "This may be trivial but why this approach as opposed to a TryFrom which can return an Error?",
+      "revId": "df8876d1f0a73154dd60fd3e0406fa4b7a7de578",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "30202a0a_c740675d",
+        "filename": "src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 222,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-02-24T15:40:37Z",
+      "side": 1,
+      "message": "This assert catches a programmer error, when the caller code used an invalid state ID. This should not happen normally, since the state IDs are predefined const values for a platform. If we would use TryFrom, the caller would likely use unwrap() for handling this and then it has the same effect as assert.\n\nSo far, here and in other similar crates like arm-ffa, we used TryFrom for cases when parsing structures from untrusted data and From + assert when its a programmer error.",
+      "parentUuid": "c86b85cc_afd897c1",
       "revId": "df8876d1f0a73154dd60fd3e0406fa4b7a7de578",
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     }
