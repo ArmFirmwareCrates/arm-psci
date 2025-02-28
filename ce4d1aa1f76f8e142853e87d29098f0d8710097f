@@ -18,6 +18,24 @@
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "286897f9_336d1d22",
+        "filename": "Cargo.toml",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-02-28T10:55:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1f97a337_b249f5bd",
+      "revId": "ce4d1aa1f76f8e142853e87d29098f0d8710097f",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bbf29527_234c8017",
@@ -31,6 +49,24 @@
       "writtenOn": "2025-02-27T14:53:23Z",
       "side": 1,
       "message": "Please add `rust-version`",
+      "revId": "ce4d1aa1f76f8e142853e87d29098f0d8710097f",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa0dd60b_11dca82b",
+        "filename": "Cargo.toml",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-02-28T10:55:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bbf29527_234c8017",
       "revId": "ce4d1aa1f76f8e142853e87d29098f0d8710097f",
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     },
@@ -52,6 +88,24 @@
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c3da570_515ccb95",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-02-28T10:55:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b54a1a63_3ce3eaa6",
+      "revId": "ce4d1aa1f76f8e142853e87d29098f0d8710097f",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b08274cb_c86c8822",
@@ -65,6 +119,24 @@
       "writtenOn": "2025-02-27T14:53:23Z",
       "side": 1,
       "message": "Should we add a line here with the Gerrit link? Like in arm-pl011-uart",
+      "revId": "ce4d1aa1f76f8e142853e87d29098f0d8710097f",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0265b7b5_f39012dd",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-02-28T10:55:30Z",
+      "side": 1,
+      "message": "It\u0027s done in the next commit.",
+      "parentUuid": "b08274cb_c86c8822",
       "revId": "ce4d1aa1f76f8e142853e87d29098f0d8710097f",
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     }
