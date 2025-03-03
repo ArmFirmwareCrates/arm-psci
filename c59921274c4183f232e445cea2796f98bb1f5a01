@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a2e53b4_ec9ba149",
+        "filename": "src/lib.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000206
+      },
+      "writtenOn": "2025-03-03T22:54:58Z",
+      "side": 1,
+      "message": "Convention for error messages is to use lower case",
+      "range": {
+        "startLine": 25,
+        "startChar": 13,
+        "endLine": 25,
+        "endChar": 25
+      },
+      "revId": "c59921274c4183f232e445cea2796f98bb1f5a01",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    }
+  ]
+}
