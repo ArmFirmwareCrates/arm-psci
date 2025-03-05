@@ -35,6 +35,24 @@
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df09f6c1_7949c4d3",
+        "filename": "README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-03-05T10:42:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb522149_7dcaf3e0",
+      "revId": "84ec043282f98b49699231983c095541407b3f3c",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3114031_4a78d9a7",
@@ -48,6 +66,24 @@
       "writtenOn": "2025-03-04T19:41:46Z",
       "side": 1,
       "message": "Not super important, but if you want you could shorten this to:\n\n```\n        if value \u0026 MBZ_BITS !\u003d 0 {\n            Err(Error::InvalidVersion(value));\n        } else {\n            Ok(Self {\n                major: (value \u003e\u003e 16) as u16,\n                minor: value as u16,\n            })\n        }\n```",
+      "revId": "84ec043282f98b49699231983c095541407b3f3c",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c9ca326_5cac6420",
+        "filename": "src/lib.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-03-05T10:42:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f3114031_4a78d9a7",
       "revId": "84ec043282f98b49699231983c095541407b3f3c",
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     },
@@ -69,6 +105,24 @@
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09638fb5_60fd6f99",
+        "filename": "src/lib.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-03-05T10:42:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2c107cd_8acbf293",
+      "revId": "84ec043282f98b49699231983c095541407b3f3c",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc8e02ea_ae04b397",
@@ -82,6 +136,24 @@
       "writtenOn": "2025-03-04T19:41:46Z",
       "side": 1,
       "message": "As above.",
+      "revId": "84ec043282f98b49699231983c095541407b3f3c",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc975c53_46621414",
+        "filename": "src/lib.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 269,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-03-05T10:42:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc8e02ea_ae04b397",
       "revId": "84ec043282f98b49699231983c095541407b3f3c",
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     },
@@ -103,6 +175,24 @@
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4a23417_6d3cd41c",
+        "filename": "src/lib.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 288,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-03-05T10:42:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4e8da0e_11bd26c2",
+      "revId": "84ec043282f98b49699231983c095541407b3f3c",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "09c15caa_641651df",
@@ -120,6 +210,24 @@
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc81326f_7af907de",
+        "filename": "src/lib.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-03-05T10:42:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09c15caa_641651df",
+      "revId": "84ec043282f98b49699231983c095541407b3f3c",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b6389a8_258f99d6",
@@ -133,6 +241,30 @@
       "writtenOn": "2025-03-05T08:54:28Z",
       "side": 1,
       "message": "nit: It always has one and we don\u0027t return an Option here, I think this can be removed",
+      "range": {
+        "startLine": 729,
+        "startChar": 45,
+        "endLine": 729,
+        "endChar": 59
+      },
+      "revId": "84ec043282f98b49699231983c095541407b3f3c",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83b485b1_e7f9945c",
+        "filename": "src/lib.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-03-05T10:42:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b6389a8_258f99d6",
       "range": {
         "startLine": 729,
         "startChar": 45,
