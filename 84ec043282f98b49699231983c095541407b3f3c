@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb522149_7dcaf3e0",
+        "filename": "README.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000160
+      },
+      "writtenOn": "2025-03-05T08:54:28Z",
+      "side": 1,
+      "message": "nit: This should be `##` too?",
+      "revId": "84ec043282f98b49699231983c095541407b3f3c",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f3114031_4a78d9a7",
         "filename": "src/lib.rs",
         "patchSetId": 8
@@ -82,6 +99,29 @@
       "writtenOn": "2025-03-04T19:41:46Z",
       "side": 1,
       "message": "You could do the `Ok(if ...)` thing here too, if you like. (Totally a matter of taste)",
+      "revId": "84ec043282f98b49699231983c095541407b3f3c",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b6389a8_258f99d6",
+        "filename": "src/lib.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1000160
+      },
+      "writtenOn": "2025-03-05T08:54:28Z",
+      "side": 1,
+      "message": "nit: It always has one and we don\u0027t return an Option here, I think this can be removed",
+      "range": {
+        "startLine": 729,
+        "startChar": 45,
+        "endLine": 729,
+        "endChar": 59
+      },
       "revId": "84ec043282f98b49699231983c095541407b3f3c",
       "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
     }
