@@ -262,6 +262,28 @@ pub struct Mpidr {
     pub aff3: Option<u8>,
 }
 
+impl Mpidr {
+    /// Create Mpidr instance from aff3-0 values
+    pub const fn from_aff3210(aff3: u8, aff2: u8, aff1: u8, aff0: u8) -> Self {
+        Self {
+            aff0,
+            aff1,
+            aff2,
+            aff3: Some(aff3),
+        }
+    }
+
+    /// Create Mpidr instance from aff2-0 values
+    pub const fn from_aff210(aff2: u8, aff1: u8, aff0: u8) -> Self {
+        Self {
+            aff0,
+            aff1,
+            aff2,
+            aff3: None,
+        }
+    }
+}
+
 impl TryFrom<u32> for Mpidr {
     type Error = Error;
 
