@@ -46,6 +46,8 @@ pub enum Error {
     UnrecognisedSuspendMode(u32),
     #[error("invalid lower affinity level {0}")]
     InvalidLowerAffinityLevel(u32),
+    #[error("ignored non-zero aff3 when converting to u32 {0}")]
+    IgnoredNonZeroAff3(u8),
 }
 
 impl From<Error> for ErrorCode {
@@ -263,6 +265,8 @@ pub struct Mpidr {
 }
 
 impl Mpidr {
+    const MBZ_BITS_64: u64 = 0xffff_ff00_ff00_0000;
+
     /// Create Mpidr instance from aff3-0 values
     pub const fn from_aff3210(aff3: u8, aff2: u8, aff1: u8, aff0: u8) -> Self {
         Self {
@@ -307,9 +311,7 @@ impl TryFrom<u64> for Mpidr {
     type Error = Error;
 
     fn try_from(value: u64) -> Result<Self, Self::Error> {
-        const MBZ_BITS: u64 = 0xffff_ff00_ff00_0000;
-
-        if value & MBZ_BITS != 0 {
+        if value & Self::MBZ_BITS_64 != 0 {
             Err(Error::InvalidMpidr64(value))
         } else {
             Ok(Self {
@@ -322,18 +324,24 @@ impl TryFrom<u64> for Mpidr {
     }
 }
 
-impl From<Mpidr> for u32 {
-    fn from(value: Mpidr) -> Self {
-        assert_eq!(value.aff3, None);
-        ((value.aff2 as u32) << 16) | ((value.aff1 as u32) << 8) | value.aff0 as u32
+impl TryFrom<Mpidr> for u32 {
+    type Error = Error;
+
+    fn try_from(value: Mpidr) -> Result<Self, Self::Error> {
+        match value.aff3 {
+            // Allow converting Mpidr to u32 if aff3 is not set or set to zero.
+            Some(0) | None => {
+                Ok(((value.aff2 as u32) << 16) | ((value.aff1 as u32) << 8) | value.aff0 as u32)
+            }
+            // Aff3 is non zero, we would lose it when converting to u32.
+            Some(aff3) => Err(Error::IgnoredNonZeroAff3(aff3)),
+        }
     }
 }
 
 impl From<Mpidr> for u64 {
     fn from(value: Mpidr) -> Self {
-        assert!(value.aff3.is_some());
-
-        ((value.aff3.unwrap() as u64) << 32)
+        ((value.aff3.unwrap_or(0) as u64) << 32)
             | ((value.aff2 as u64) << 16)
             | ((value.aff1 as u64) << 8)
             | value.aff0 as u64
@@ -884,10 +892,7 @@ impl Function {
                 }
             }
             Function::CpuOn { target_cpu, entry } => {
-                a[1] = match target_cpu {
-                    Mpidr { aff3: None, .. } => u32::from(target_cpu).into(),
-                    Mpidr { aff3: Some(_), .. } => u64::from(target_cpu),
-                };
+                a[1] = target_cpu.into();
                 (a[2], a[3]) = match entry {
                     EntryPoint::Entry32 {
                         entry_point_address,
@@ -903,17 +908,11 @@ impl Function {
                 mpidr,
                 lowest_affinity_level,
             } => {
-                a[1] = match mpidr {
-                    Mpidr { aff3: None, .. } => u32::from(mpidr).into(),
-                    Mpidr { aff3: Some(_), .. } => u64::from(mpidr),
-                };
+                a[1] = mpidr.into();
                 a[2] = lowest_affinity_level.into();
             }
             Function::Migrate { target_affinity } => {
-                a[1] = match target_affinity {
-                    Mpidr { aff3: None, .. } => u32::from(target_affinity).into(),
-                    Mpidr { aff3: Some(_), .. } => u64::from(target_affinity),
-                };
+                a[1] = target_affinity.into();
             }
             Function::SystemOff2 {
                 off_type: hibernate_type,
@@ -960,10 +959,7 @@ impl Function {
                 target_cpu,
                 power_level,
             } => {
-                a[1] = match target_cpu {
-                    Mpidr { aff3: None, .. } => u32::from(target_cpu).into(),
-                    Mpidr { aff3: Some(_), .. } => u64::from(target_cpu),
-                };
+                a[1] = target_cpu.into();
                 a[2] = power_level.into();
             }
             Function::SystemSuspend { entry } => {
@@ -985,20 +981,14 @@ impl Function {
                 target_cpu,
                 power_state,
             } => {
-                a[1] = match target_cpu {
-                    Mpidr { aff3: None, .. } => u32::from(target_cpu).into(),
-                    Mpidr { aff3: Some(_), .. } => u64::from(target_cpu),
-                };
+                a[1] = target_cpu.into();
                 a[2] = u32::from(power_state).into();
             }
             Function::StatCount {
                 target_cpu,
                 power_state,
             } => {
-                a[1] = match target_cpu {
-                    Mpidr { aff3: None, .. } => u32::from(target_cpu).into(),
-                    Mpidr { aff3: Some(_), .. } => u64::from(target_cpu),
-                };
+                a[1] = target_cpu.into();
                 a[2] = u32::from(power_state).into();
             }
         }
@@ -1146,12 +1136,7 @@ mod tests {
         );
 
         assert_eq!(
-            Ok(Mpidr {
-                aff0: 0x33,
-                aff1: 0x22,
-                aff2: 0x11,
-                aff3: None
-            }),
+            Ok(Mpidr::from_aff210(0x11, 0x22, 0x33)),
             Mpidr::try_from(0x0011_2233u32)
         );
 
@@ -1161,58 +1146,29 @@ mod tests {
         );
 
         assert_eq!(
-            Ok(Mpidr {
-                aff0: 0x33,
-                aff1: 0x22,
-                aff2: 0x11,
-                aff3: Some(0x44)
-            }),
+            Ok(Mpidr::from_aff3210(0x44, 0x11, 0x22, 0x33)),
             Mpidr::try_from(0x0000_0044_0011_2233u64)
         );
 
         assert_eq!(
-            0x0011_2233u32,
-            Mpidr {
-                aff0: 0x33,
-                aff1: 0x22,
-                aff2: 0x11,
-                aff3: None
-            }
-            .into()
+            Ok(0x0011_2233u32),
+            Mpidr::from_aff210(0x11, 0x22, 0x33).try_into()
         );
 
         assert_eq!(
             0x0000_0044_0011_2233u64,
-            Mpidr {
-                aff0: 0x33,
-                aff1: 0x22,
-                aff2: 0x11,
-                aff3: Some(0x44)
-            }
-            .into()
+            Mpidr::from_aff3210(0x44, 0x11, 0x22, 0x33).into()
         );
-    }
 
-    #[test]
-    #[should_panic]
-    fn test_mpidr_32_invalid() {
-        let _ = u32::from(Mpidr {
-            aff0: 0x33,
-            aff1: 0x22,
-            aff2: 0x11,
-            aff3: Some(0x44),
-        });
-    }
+        assert_eq!(
+            Err(Error::IgnoredNonZeroAff3(0x44)),
+            u32::try_from(Mpidr::from_aff3210(0x44, 0x11, 0x22, 0x33))
+        );
 
-    #[test]
-    #[should_panic]
-    fn test_mpidr_64_invalid() {
-        let _ = u64::from(Mpidr {
-            aff0: 0x33,
-            aff1: 0x22,
-            aff2: 0x11,
-            aff3: None,
-        });
+        assert_eq!(
+            0x0011_2233u64,
+            u64::from(Mpidr::from_aff210(0x11, 0x22, 0x33))
+        );
     }
 
     #[test]
