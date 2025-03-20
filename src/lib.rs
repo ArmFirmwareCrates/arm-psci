@@ -286,6 +286,17 @@ impl Mpidr {
             aff3: None,
         }
     }
+
+    /// The `MPIDR_EL1` register contains bits other then the aff3-0 fields. However the PSCI
+    /// specification request bits[40:63] and bits[24:31] to be set to zero when forwarding an
+    /// MPIDR value as an argument of a PSCI function call. Because of this, the `TryFrom`
+    /// implementation returns an error if these bits are set. In other cases the `Mpidr` value is
+    /// constructed from the `MPIDR_EL1` register value of the local core. This function does this
+    /// by ignoring other bits. Do not use this function for creating `Mpidr` instance from a PSCI
+    /// function argument.
+    pub fn from_register_value(mpidr_el1: u64) -> Self {
+        Self::try_from(mpidr_el1 & !Self::MBZ_BITS_64).unwrap()
+    }
 }
 
 impl TryFrom<u32> for Mpidr {
@@ -1168,6 +1179,11 @@ mod tests {
         assert_eq!(
             0x0011_2233u64,
             u64::from(Mpidr::from_aff210(0x11, 0x22, 0x33))
+        );
+
+        assert_eq!(
+            Mpidr::from_aff3210(0x44, 0x11, 0x22, 0x33),
+            Mpidr::from_register_value(0x0000_0044_4111_2233u64)
         );
     }
 
