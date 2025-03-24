@@ -253,6 +253,30 @@ pub enum EntryPoint {
     },
 }
 
+impl EntryPoint {
+    /// Returns the entry point address.
+    pub fn entry_point_address(&self) -> u64 {
+        match self {
+            Self::Entry32 {
+                entry_point_address,
+                ..
+            } => (*entry_point_address).into(),
+            Self::Entry64 {
+                entry_point_address,
+                ..
+            } => *entry_point_address,
+        }
+    }
+
+    /// Returns the context ID.
+    pub fn context_id(&self) -> u64 {
+        match self {
+            Self::Entry32 { context_id, .. } => (*context_id).into(),
+            Self::Entry64 { context_id, .. } => *context_id,
+        }
+    }
+}
+
 /// The type contains the affinity fields of the MPIDR register.
 /// For AArch32 callers this contains Affinity 0, 1, 2 fields and for AAarch64 callers it has
 /// Affinity 0, 1, 2, 3 fields.
@@ -1137,6 +1161,25 @@ mod tests {
         );
 
         assert_eq!(0x4123_4567, u32::from(PowerState::PowerDown(0x123_4567)));
+    }
+
+    #[test]
+    fn test_entry_point() {
+        let entry = EntryPoint::Entry32 {
+            entry_point_address: 0x1234_5678,
+            context_id: 0x9abc_def0,
+        };
+
+        assert_eq!(0x1234_5678, entry.entry_point_address());
+        assert_eq!(0x9abc_def0, entry.context_id());
+
+        let entry = EntryPoint::Entry64 {
+            entry_point_address: 0x1234_5678_9abc_def0,
+            context_id: 0x9abc_def0_1234_5678,
+        };
+
+        assert_eq!(0x1234_5678_9abc_def0, entry.entry_point_address());
+        assert_eq!(0x9abc_def0_1234_5678, entry.context_id());
     }
 
     #[test]
