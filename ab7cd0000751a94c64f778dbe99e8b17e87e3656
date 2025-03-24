@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d7fb2c4e_656733d9",
+        "filename": "src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-03-24T11:41:18Z",
+      "side": 1,
+      "message": "These bits are MBZ according to PSCI \u00275.1.4 CPU_ON\u0027 not by Arm ARM. It is an error when parsing an MPIDR from a PSCI call argument and any of these bits are set.\nThis is why the next commit introduces the `from_register_value` function which ignores all other bits so it can create an Mpidr instance from an actual `MPIDR_EL1` register value which might have the MT bit set.",
+      "parentUuid": "6b4e717c_917bb092",
+      "revId": "ab7cd0000751a94c64f778dbe99e8b17e87e3656",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5b339ce2_589ac819",
         "filename": "src/lib.rs",
         "patchSetId": 1
@@ -31,6 +49,30 @@
       "writtenOn": "2025-03-21T07:51:31Z",
       "side": 1,
       "message": "Missing end of the sentence",
+      "range": {
+        "startLine": 332,
+        "startChar": 53,
+        "endLine": 332,
+        "endChar": 55
+      },
+      "revId": "ab7cd0000751a94c64f778dbe99e8b17e87e3656",
+      "serverId": "8f6f209b-db1a-4cbf-aa44-c8bc30e9bfda"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "639a2292_19400bdd",
+        "filename": "src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1000159
+      },
+      "writtenOn": "2025-03-24T11:41:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b339ce2_589ac819",
       "range": {
         "startLine": 332,
         "startChar": 53,
