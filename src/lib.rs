@@ -312,7 +312,7 @@ impl Mpidr {
     }
 
     /// The `MPIDR_EL1` register contains bits other then the aff3-0 fields. However the PSCI
-    /// specification request bits[40:63] and bits[24:31] to be set to zero when forwarding an
+    /// specification request bits\[40:63\] and bits\[24:31\] to be set to zero when forwarding an
     /// MPIDR value as an argument of a PSCI function call. Because of this, the `TryFrom`
     /// implementation returns an error if these bits are set. In other cases the `Mpidr` value is
     /// constructed from the `MPIDR_EL1` register value of the local core. This function does this
