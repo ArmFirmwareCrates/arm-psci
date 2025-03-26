@@ -1,0 +1,6 @@
+Code-Review+2: Bálint Dobszay <balint.dobszay@arm.com>
+Submitted-by: Kis Imre <imre.kis@arm.com>
+Submitted-at: Wed, 26 Mar 2025 12:09:14 +0100
+Reviewed-on: https://review.trustedfirmware.org/c/rust-spmc/arm-psci/+/36539
+Project: rust-spmc/arm-psci
+Branch: refs/heads/main
