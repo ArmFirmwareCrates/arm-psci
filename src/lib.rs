@@ -26,6 +26,8 @@ pub enum Error {
     UnrecognisedFunctionId(u32),
     #[error("unrecognised PSCI error code {0}")]
     UnrecognisedErrorCode(i32),
+    #[error("overflowing PSCI error code {0}")]
+    OverflowingErrorCode(i64),
     #[error("invalid PSCI version {0}")]
     InvalidVersion(u32),
     #[error("invalid power state value {0}")]
@@ -160,6 +162,41 @@ pub enum ErrorCode {
     Disabled = -8,
     #[error("Invalid address")]
     InvalidAddress = -9,
+}
+
+impl TryFrom<u32> for ErrorCode {
+    type Error = Error;
+
+    fn try_from(value: u32) -> Result<Self, Self::Error> {
+        Self::try_from_primitive(value as i32)
+    }
+}
+
+impl TryFrom<u64> for ErrorCode {
+    type Error = Error;
+
+    fn try_from(value: u64) -> Result<Self, Self::Error> {
+        let signed_value =
+            i32::try_from(value as i64).map_err(|_| Error::OverflowingErrorCode(value as i64))?;
+        Self::try_from_primitive(signed_value)
+    }
+}
+
+impl From<ErrorCode> for u32 {
+    /// Converts `ErrorCode` to be suitable for returning it in a 32-bit register.
+    /// See 5.2.2 Return error codes
+    fn from(value: ErrorCode) -> Self {
+        i32::from(value) as u32
+    }
+}
+
+impl From<ErrorCode> for u64 {
+    /// Converts `ErrorCode` to be suitable for returning it in a 64-bit register, i.e. it does
+    /// sign extension to 64 bits.
+    /// See 5.2.2 Return error codes
+    fn from(value: ErrorCode) -> Self {
+        i32::from(value) as u64
+    }
 }
 
 /// Structure for describing PSCI major and minor version.
@@ -1107,6 +1144,37 @@ mod tests {
         assert_eq!(-7, i32::from(ErrorCode::NotPresent));
         assert_eq!(-8, i32::from(ErrorCode::Disabled));
         assert_eq!(-9, i32::from(ErrorCode::InvalidAddress));
+
+        assert_eq!(
+            Err(Error::UnrecognisedErrorCode(0)),
+            ErrorCode::try_from(0u32)
+        );
+
+        assert_eq!(
+            Ok(ErrorCode::NotSupported),
+            ErrorCode::try_from(0xffff_ffffu32)
+        );
+
+        assert_eq!(
+            Err(Error::UnrecognisedErrorCode(0)),
+            ErrorCode::try_from(0u64)
+        );
+
+        assert_eq!(
+            Err(Error::OverflowingErrorCode(0x7fff_ffff_ffff_ffff)),
+            ErrorCode::try_from(0x7fff_ffff_ffff_ffffu64)
+        );
+
+        assert_eq!(
+            Ok(ErrorCode::NotSupported),
+            ErrorCode::try_from(0xffff_ffff_ffff_ffffu64)
+        );
+
+        assert_eq!(0xffff_fffe, u32::from(ErrorCode::InvalidParameters));
+        assert_eq!(
+            0xffff_ffff_ffff_fffe,
+            u64::from(ErrorCode::InvalidParameters)
+        );
     }
 
     #[test]
