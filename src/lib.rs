@@ -50,6 +50,7 @@ pub enum Error {
     InvalidLowerAffinityLevel(u32),
     #[error("ignored non-zero aff3 when converting to u32 {0}")]
     IgnoredNonZeroAff3(u8),
+    asd,
 }
 
 impl From<Error> for ErrorCode {
