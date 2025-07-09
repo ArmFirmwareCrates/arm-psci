@@ -55,4 +55,4 @@ Arm word trademark.
 
 --------------
 
-*Copyright 2025 Arm Limited and/or its affiliates <open-source-office@arm.com>*
+*Copyright The arm-psci Contributors.*
