@@ -40,10 +40,6 @@ Please follow the directions of the [Trusted Firmware Processes](https://trusted
 
 Contributions are handled through [review.trustedfirmware.org](https://review.trustedfirmware.org/q/project:rust-spmc/arm-psci).
 
-## Reporting Security Issues
-
-Please follow the directions of the [Trusted Firmware Security Center](https://trusted-firmware-docs.readthedocs.io/en/latest/security_center/index.html).
-
 --------------
 
 *Copyright 2025 Arm Limited and/or its affiliates <open-source-office@arm.com>*
