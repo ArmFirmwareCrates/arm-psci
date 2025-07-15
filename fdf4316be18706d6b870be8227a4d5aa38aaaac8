@@ -1,0 +1,7 @@
+Verified+1: ci-bot
+Code-Review+2: Kis Imre <imre.kis@arm.com>
+Submitted-by: Sandrine Afsa <sandrine.afsa@arm.com>
+Submitted-at: Tue, 15 Jul 2025 07:48:45 +0000
+Reviewed-on: https://review.trustedfirmware.org/c/rust-spmc/arm-psci/+/40482
+Project: rust-spmc/arm-psci
+Branch: refs/heads/main
