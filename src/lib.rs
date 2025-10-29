@@ -671,10 +671,10 @@ pub enum Function {
     },
 }
 
-impl TryFrom<[u64; 4]> for Function {
+impl TryFrom<&[u64; 4]> for Function {
     type Error = Error;
 
-    fn try_from(regs: [u64; 4]) -> Result<Self, Error> {
+    fn try_from(regs: &[u64; 4]) -> Result<Self, Error> {
         let fid = FunctionId::try_from(regs[0] as u32)?;
 
         let msg = match fid {
@@ -1094,7 +1094,7 @@ mod tests {
 
     macro_rules! validate_function {
         ( $regs:expr, $function:expr, $function_id:expr ) => {
-            assert_eq!(Ok($function), Function::try_from($regs));
+            assert_eq!(Ok($function), Function::try_from(&$regs));
             assert_eq!($function_id, ($function).function_id());
 
             let mut built_regs = [0; 4];
@@ -1550,12 +1550,12 @@ mod tests {
 
         assert_eq!(
             Err(Error::InvalidLowerAffinityLevel(3)),
-            Function::try_from([0x8400_0004, MPIDR32_VALUE.into(), 3, 0])
+            Function::try_from(&[0x8400_0004, MPIDR32_VALUE.into(), 3, 0])
         );
 
         assert_eq!(
             Err(Error::InvalidLowerAffinityLevel(4)),
-            Function::try_from([0xc400_0004, MPIDR64_VALUE, 4, 0])
+            Function::try_from(&[0xc400_0004, MPIDR64_VALUE, 4, 0])
         );
     }
 
