@@ -18,6 +18,21 @@ the scope of this crate.
 
 * The implementation does not handle pre-1.0 format suspend power state (see 5.4.2.1 Original format)
 
+## Fuzzing
+
+For running the fuzzers locally, make sure you have a nightly rust toolchain
+and `cargo-fuzz` installed:
+
+```sh
+rustup install nightly
+cargo install cargo-fuzz
+```
+
+You can run individual fuzzers with `cargo +nightly fuzz run <fuzzer_name>`, or
+run them all with `fuzz/run_all.sh`. A coverage report can be generated with
+`fuzz/get_coverage.sh`, this requires `cargo-binutils` and `lcov` to be
+installed. The report will be placed in `fuzz/lcov/index.html`.
+
 ## License
 
 The project is MIT and Apache-2.0 dual licensed, see `LICENSE-APACHE` and `LICENSE-MIT`.
